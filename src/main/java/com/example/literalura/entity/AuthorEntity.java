@@ -1,7 +1,19 @@
 package com.example.literalura.entity;
 
-import jakarta.persistence.*;
+import com.example.literalura.util.CadenasUtil;
+import com.example.literalura.util.CadenasUtil;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.OneToOne;
+import jakarta.persistance.Table;
+
+@Entity
+@Table(name = "Autor")
 public class AuthorEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,12 +28,67 @@ public class AuthorEntity {
             joinColumns = @JoinColumn(name = "autor_id"),
             inverseJoinColumns = @JoinColumn(name = "id")
             )
-    private LibroEntity libros;
+    private BookEntity libros;
+
+
     public AuthorEntity(){
     }
+
+
     public AuthorEntity(Autor autor){
-        this.nombre =
+
+        this.nombre = CadenasUtil.limitarLongitud(autor.name(), 100);
+        if(autor.birthYear() == null)
+            this.fechaNacimiento = 1900;
+        if(autor.deathYear() == null)
+            this.fechaFallecimiento = 2099;
+        else
+            this.fechaFallecimiento = autor.death.Year();
+    }
+    public Long getId(){
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public Integer getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(Integer fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public Integer getFechaFallecimiento() {
+        return fechaFallecimiento;
+    }
+
+    public void setFechaFallecimiento(Integer fechaFallecimiento) {
+        this.fechaFallecimiento = fechaFallecimiento;
+    }
+
+
+    @Override
+    public String toString() {
+        return "AutorEntity [id=" + id + ", nombre=" + nombre + ", fechaNacimiento=" + fechaNacimiento
+                + ", fechaFallecimiento=" + fechaFallecimiento + ", libro="  + "]";
+    }
+
+    public BookEntity getLibros() {
+        return libros;
+    }
+
+    public void setLibros(BookEntity libros) {
+        this.libros = libros;
     }
 }
-@Entity
-@Table(name = "Autor")
+
